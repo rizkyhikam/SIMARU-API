@@ -22,7 +22,7 @@ class PeminjamanController extends Controller
 
         // 2. Kalo disetujui, otomatis ganti status ruangannya bray
         if ($request->status == 'Disetujui') {
-            $ruangan = Room::where('nama_ruangan', $pinjam->nama_ruangan)->first();
+            $ruangan = Room::where('nama_ruangan', $pinjam->room_name)->first();
             if ($ruangan) {
                 $ruangan->status = 'Dipakai'; // Ruangan jadi ga tersedia otomatis
                 $ruangan->save();

@@ -24,7 +24,7 @@ class AdminAuthController extends Controller
             return redirect()->intended('/menu/admin');
         }
 
-        return back()->withErrors(['email' => 'Login Gagal! Akun gak ketemu di tabel Admin.']);
+        return back()->withErrors(['email' => 'Login Gagal! Email atau Password Salah!']);
     }
 
     public function hapusRuangan($id)

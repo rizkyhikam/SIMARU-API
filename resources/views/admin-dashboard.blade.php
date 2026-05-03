@@ -134,12 +134,12 @@
                         </div>
                         <div class="min-w-0 flex-1">
                             <div class="flex justify-between items-start mb-1">
-                                <h4 class="font-bold text-[#0B0A4E] text-sm truncate pr-2 uppercase">{{ $row->peminjam }}</h4>
+                                <h4 class="font-bold text-[#0B0A4E] text-sm truncate pr-2 uppercase">{{ $row->user_name ?? 'Tanpa Nama' }}</h4>
                                 <span class="text-[8px] font-black uppercase px-2 py-1 rounded {{ $row->status == 'Disetujui' ? 'bg-green-100 text-green-600' : 'bg-orange-100 text-orange-500' }}">
                                     {{ $row->status }}
                                 </span>
                             </div>
-                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-tighter">{{ $row->nama_ruangan }}</p>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-tighter">{{ $row->room_name ?? 'Ruangan Unknown' }}</p>
                         </div>
                     </div>
                     @empty
