@@ -15,11 +15,11 @@
         html, body { max-width: 100%; overflow-x: hidden; }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #0B0A4E; border-radius: 10px; }
-        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.5); }
+        ::-webkit-scrollbar-thumb { background: #2563EB; border-radius: 10px; }
+        .glass-card { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.6); }
     </style>
 </head>
-<body class="bg-[#F8FAFC]" x-data="{ openModal: false, openSchedule: false, selectedRoom: {} }">
+<body class="bg-[#F0F4F8]" x-data="{ openModal: false, openSchedule: false, selectedRoom: {} }">
 
     <div class="flex h-screen w-full overflow-hidden">
         <aside class="w-64 bg-[#0B0A4E] h-full flex flex-col p-6 shadow-2xl z-30 flex-shrink-0">
@@ -57,39 +57,41 @@
             </form>
         </aside>
 
-        <main class="flex-grow h-full overflow-y-auto overflow-x-hidden relative bg-[#F8FAFC]">
-            <div class="bg-gradient-to-br from-[#0B0A4E] via-blue-700 to-cyan-500 p-10 pb-28 relative w-full">
+        <main class="flex-grow h-full overflow-y-auto overflow-x-hidden relative bg-[#F0F4F8]">
+            <div class="bg-gradient-to-br from-[#1E3A8A] via-[#2563EB] to-[#4F46E5] p-10 pb-32 relative w-full rounded-b-[40px] shadow-lg shadow-blue-900/10">
                 <div class="absolute top-0 right-0 w-1/3 h-full bg-white/5 skew-x-[-20deg] translate-x-20"></div>
-                <div class="text-white relative z-10">
+                <div class="absolute -left-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
+                
+                <div class="text-white relative z-10 space-y-1">
                     <div class="flex items-center gap-2 mb-2">
-                        <span class="w-8 h-[2px] bg-cyan-400"></span>
-                        <p class="text-[10px] font-black uppercase tracking-[0.3em] text-cyan-300">Dashboard Mahasiswa</p>
+                        <span class="w-6 h-[2px] bg-cyan-400 rounded-full"></span>
+                        <p class="text-[9px] font-bold uppercase tracking-[0.25em] text-cyan-300">Student Portal Dashboard</p>
                     </div>
-                    <h2 class="text-4xl font-black tracking-tight uppercase leading-none">Halo, {{ Auth::user()->name }}!</h2>
-                    <p class="text-xs opacity-70 mt-2 font-medium">{{ Auth::user()->email }}</p>
+                    <h2 class="text-3xl font-extrabold tracking-tight">Halo, {{ Auth::user()->name }}! 👋</h2>
+                    <p class="text-xs text-blue-100 opacity-80 font-medium">Mau pinjam ruangan apa untuk aktivitas akademikmu hari ini?</p>
                 </div>
 
-                <div class="grid grid-cols-2 gap-8 mt-10 absolute -bottom-16 left-10 right-10 z-20">
-                    <div class="glass-card p-7 rounded-[35px] shadow-[0_20px_50px_rgba(0,0,0,0.05)] flex items-center justify-between group hover:translate-y-[-5px] transition-all">
-                        <div class="flex items-center gap-6">
-                            <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-700 rounded-[22px] flex items-center justify-center shadow-lg">
-                                <i class="fas fa-door-open text-xl text-white"></i>
+                <div class="grid grid-cols-2 gap-6 absolute -bottom-16 left-10 right-10 z-20">
+                    <div class="glass-card p-6 rounded-[28px] shadow-[0_15px_40px_rgba(37,99,235,0.04)] flex items-center justify-between group hover:-translate-y-1 transition-all duration-300">
+                        <div class="flex items-center gap-5">
+                            <div class="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center shadow-md shadow-blue-600/20">
+                                <i class="fas fa-door-open text-lg text-white"></i>
                             </div>
                             <div class="min-w-0">
-                                <p class="text-[9px] font-extrabold uppercase tracking-[0.2em] text-gray-400 mb-1">Total Ruangan</p>
-                                <h3 class="text-4xl font-black text-[#0B0A4E] tracking-tighter">{{ $rooms->count() }}</h3>
+                                <p class="text-[9px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">Total Ruangan</p>
+                                <h3 class="text-3xl font-extrabold text-slate-900 tracking-tight">{{ $rooms->count() }}</h3>
                             </div>
                         </div>
                     </div>
 
-                    <div class="glass-card p-7 rounded-[35px] shadow-[0_20px_50px_rgba(0,0,0,0.05)] flex items-center justify-between group hover:translate-y-[-5px] transition-all">
-                        <div class="flex items-center gap-6">
-                            <div class="w-14 h-14 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-[22px] flex items-center justify-center shadow-lg">
-                                <i class="fas fa-check-circle text-xl text-white"></i>
+                    <div class="glass-card p-6 rounded-[28px] shadow-[0_15px_40px_rgba(37,99,235,0.04)] flex items-center justify-between group hover:-translate-y-1 transition-all duration-300">
+                        <div class="flex items-center gap-5">
+                            <div class="w-12 h-12 bg-emerald-500 rounded-2xl flex items-center justify-center shadow-md shadow-emerald-500/20">
+                                <i class="fas fa-check-circle text-lg text-white"></i>
                             </div>
                             <div class="min-w-0">
-                                <p class="text-[9px] font-extrabold uppercase tracking-[0.2em] text-gray-400 mb-1">Ruang Tersedia</p>
-                                <h3 class="text-4xl font-black text-[#0B0A4E] tracking-tighter">{{ $rooms->where('status', 'Tersedia')->count() }}</h3>
+                                <p class="text-[9px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">Ruang Tersedia</p>
+                                <h3 class="text-3xl font-extrabold text-emerald-600 tracking-tight">{{ $rooms->where('status', 'Tersedia')->count() }}</h3>
                             </div>
                         </div>
                     </div>
@@ -103,31 +105,36 @@
                     </button>
                 </div>
 
-                <div class="grid grid-cols-1 gap-6 w-full">
+                <div class="grid grid-cols-1 gap-5 w-full">
                     @forelse($rooms as $room)
-                    <div class="bg-white p-5 rounded-[40px] shadow-sm border border-gray-50 flex flex-col md:flex-row items-center gap-8 hover:shadow-xl hover:translate-y-[-2px] transition-all duration-300 w-full">
-                        <div class="w-full md:w-56 h-40 overflow-hidden rounded-[30px] shadow-inner flex-shrink-0 relative">
-                            <img src="{{ $room->image ? asset('storage/' . $room->image) : 'https://via.placeholder.com/400x280?text=No+Image' }}" class="w-full h-full object-cover">
+                    <div class="bg-white p-4 rounded-[28px] shadow-[0_8px_30px_rgb(0,0,0,0.015)] border border-slate-100 flex flex-col md:flex-row items-center gap-6 hover:shadow-[0_20px_40px_rgba(0,0,0,0.03)] hover:-translate-y-0.5 transition-all duration-300 w-full group">
+                        
+                        <div class="w-full md:w-52 h-36 overflow-hidden rounded-[20px] bg-slate-50 flex-shrink-0 relative shadow-inner">
+                            <img src="{{ $room->image ? asset('storage/' . $room->image) : 'https://via.placeholder.com/400x280?text=No+Image' }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         </div>
-                        <div class="flex-grow text-center md:text-left min-w-0">
-                            <h4 class="text-2xl font-black text-[#0B0A4E] uppercase tracking-tight mb-3 truncate">{{ $room->nama_ruangan }}</h4>
-                            <div class="flex flex-wrap justify-center md:justify-start items-center gap-3">
-                                <span class="{{ $room->status == 'Tersedia' ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600' }} text-[9px] font-black px-5 py-2 rounded-full uppercase border border-current opacity-70">
+                        
+                        <div class="flex-grow text-center md:text-left min-w-0 py-2">
+                            <span class="text-[9px] font-bold text-blue-600 uppercase tracking-widest block mb-1">Fasilitas Kampus</span>
+                            <h4 class="text-xl font-extrabold text-slate-900 tracking-tight mb-3 truncate group-hover:text-blue-600 transition-colors">{{ $room->nama_ruangan }}</h4>
+                            
+                            <div class="flex flex-wrap justify-center md:justify-start items-center gap-2">
+                                <span class="{{ $room->status == 'Tersedia' ? 'bg-emerald-50 text-emerald-600 border-emerald-200/60' : 'bg-rose-50 text-rose-600 border-rose-200/60' }} text-[10px] font-bold px-4 py-1.5 rounded-xl uppercase border">
                                     {{ $room->status }}
                                 </span>
-                                <span class="bg-blue-50 text-blue-600 text-[9px] font-black px-5 py-2 rounded-full uppercase">
-                                    <i class="fas fa-users mr-1.5"></i> {{ $room->kapasitas }} Orang
+                                <span class="bg-blue-50/60 text-blue-600 border border-blue-100/50 text-[10px] font-bold px-4 py-1.5 rounded-xl uppercase">
+                                    <i class="fas fa-users mr-1.5 opacity-80"></i> {{ $room->kapasitas }} Kursi
                                 </span>
                             </div>
                         </div>
+                        
                         <div class="w-full md:w-auto px-4">
-                            <button @click="openModal = true; selectedRoom = {{ json_encode($room) }}" class="w-full md:w-auto bg-[#0B0A4E] hover:bg-blue-700 text-white font-black px-12 py-5 rounded-[25px] text-[10px] uppercase tracking-[0.2em] shadow-xl transition-all">
-                                Booking
+                            <button @click="openModal = true; selectedRoom = {{ json_encode($room) }}" class="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3.5 rounded-xl text-xs tracking-wide shadow-md shadow-blue-600/10 hover:shadow-blue-600/20 transition-all active:scale-95">
+                                Booking Ruangan
                             </button>
                         </div>
                     </div>
                     @empty
-                    <div class="text-center py-20 bg-white rounded-[50px] border-2 border-dashed border-gray-100 text-gray-400 font-bold uppercase text-xs w-full">Belum ada ruangan.</div>
+                    <div class="text-center py-16 bg-white rounded-[32px] border border-dashed border-slate-200 text-slate-400 font-bold uppercase text-xs w-full tracking-wider">Belum ada data ruangan yang tersedia.</div>
                     @endforelse
                 </div>
             </div>
