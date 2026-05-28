@@ -22,8 +22,10 @@
             </a>
 
             <div class="flex-grow flex flex-col items-center justify-center">
-                <div class="w-24 h-24 bg-white/5 rounded-[30px] flex items-center justify-center mb-10 border border-white/10">
-                    <i class="fas fa-university text-4xl text-cyan-400"></i>
+                <div class="w-24 h-24 bg-white rounded-[30px] flex items-center justify-center mb-10 border border-white/10 p-1.5 shadow-2xl">
+                    <div class="w-full h-full rounded-[22px] overflow-hidden shadow-inner flex items-center justify-center">
+                        <img src="{{ asset('storage/rooms/logo simaru.jpeg') }}" alt="Logo SIMARU" class="w-full h-full object-cover">
+                    </div>
                 </div>
                 <h1 class="text-6xl font-black text-white tracking-tighter uppercase mb-2">SIMARU</h1>
                 <p class="text-cyan-400 text-xs font-black uppercase tracking-[0.4em]">Student Portal Access</p>

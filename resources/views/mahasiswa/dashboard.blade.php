@@ -19,18 +19,18 @@
         .glass-card { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.6); }
     </style>
 </head>
-<body class="bg-[#F0F4F8]" x-data="{ openModal: false, openSchedule: false, selectedRoom: {} }">
+<body class="bg-[#F0F4F8]" x-data="{ openModal: false, openSchedule: '{{ request('filter_date') ? true : false }}', selectedRoom: {} }">
 
     <div class="flex h-screen w-full overflow-hidden">
         <aside class="w-64 bg-[#0B0A4E] h-full flex flex-col p-6 shadow-2xl z-30 flex-shrink-0">
-            <div class="mb-10">
+            <div class="mb-10 flex flex-col items-start">
                 <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 bg-cyan-400 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-university text-[#0B0A4E] text-xs"></i>
+                    <div class="w-10 h-10 bg-white rounded-xl overflow-hidden shadow-md flex items-center justify-center p-0.5 flex-shrink-0">
+                        <img src="{{ asset('storage/rooms/logo simaru.jpeg') }}" alt="Logo SIMARU" class="w-full h-full object-cover rounded-lg">
                     </div>
                     <h1 class="text-xl font-black text-white tracking-tighter uppercase">SIMARU</h1>
                 </div>
-                <p class="text-cyan-400 text-[8px] font-black uppercase tracking-[0.3em] mt-2">Student Portal</p>
+                <p class="text-cyan-400 text-[8px] font-black uppercase tracking-[0.3em] mt-2 pl-1">Student Portal</p>
             </div>
 
             <nav class="flex-grow space-y-2">
@@ -143,46 +143,68 @@
 
     <div x-show="openModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4">
         <div x-show="openModal" x-transition.opacity class="fixed inset-0 bg-[#0B0A4E]/60 backdrop-blur-md" @click="openModal = false"></div>
-        <div x-show="openModal" x-transition.scale.95 class="bg-white w-full max-w-md rounded-[45px] overflow-hidden shadow-2xl relative z-10 border border-white">
-            <div class="h-52 relative">
+        <div x-show="openModal" x-transition.scale.95 class="bg-white w-full max-w-md rounded-2xl overflow-hidden shadow-2xl relative z-10 border border-slate-100 max-h-[90vh] flex flex-col">
+            
+            <div class="h-44 relative flex-shrink-0">
                 <img :src="selectedRoom.image ? '/storage/' + selectedRoom.image : 'https://via.placeholder.com/400x280'" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-                <div class="absolute bottom-6 left-8 text-white">
-                    <h3 class="text-2xl font-black uppercase tracking-tighter" x-text="selectedRoom.nama_ruangan"></h3>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                <div class="absolute bottom-4 left-6 text-white">
+                    <h3 class="text-xl font-extrabold uppercase tracking-tight" x-text="selectedRoom.nama_ruangan"></h3>
                 </div>
-                <button @click="openModal = false" class="absolute top-6 right-6 text-white/50 hover:text-white transition-colors"><i class="fas fa-times-circle text-2xl"></i></button>
+                <button @click="openModal = false" class="absolute top-4 right-4 text-white/60 hover:text-white transition-colors">
+                    <i class="fas fa-times-circle text-xl"></i>
+                </button>
             </div>
-            <div class="p-8">
-                <div class="mb-6 text-left">
-                    <label class="text-[9px] font-black text-gray-400 uppercase ml-2 mb-2 block italic">Jadwal Ruangan Terisi:</label>
-                    <div class="space-y-2 max-h-24 overflow-y-auto px-2">
-                        <template x-for="p in {{ json_encode($all_peminjaman) }}.filter(item => item.room_id === selectedRoom._id)">
-                            <div class="flex items-center justify-between bg-red-50 p-3 rounded-xl border border-red-100">
-                                <span class="text-[10px] font-bold text-red-600" x-text="p.tanggal"></span>
-                                <span class="text-[10px] font-black text-red-700 bg-white px-2 py-1 rounded-lg" x-text="p.jam_mulai + ' - ' + p.jam_selesai"></span>
-                            </div>
-                        </template>
-                    </div>
-                </div>
-                <form id="formAjukanBooking" class="space-y-4">
+
+            <div class="p-6 overflow-y-auto space-y-4 text-left flex-grow">
+                <form id="formAjukanBooking" class="space-y-4" enctype="multipart/form-data" x-data="{ ktmFile: '' }">
                     @csrf
-                    <div class="bg-gray-50 p-6 rounded-[32px] border border-gray-100 space-y-4 text-left">
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-100 space-y-3">
                         <div>
-                            <label class="text-[9px] font-black text-gray-400 uppercase ml-2 mb-1 block">Tanggal</label>
-                            <input type="date" name="tanggal" required class="w-full bg-white border border-gray-100 py-4 px-5 rounded-2xl text-xs font-bold outline-none">
+                            <label class="text-[9px] font-black text-slate-400 uppercase ml-1 mb-1 block">Tanggal Pinjam</label>
+                            <input type="date" name="tanggal" required class="w-full bg-white border border-slate-200/60 py-2.5 px-4 rounded-xl text-xs font-bold outline-none focus:border-blue-500">
                         </div>
-                        <div class="grid grid-cols-2 gap-4">
+                        
+                        <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="text-[9px] font-black text-gray-400 uppercase ml-2 mb-1 block">Mulai</label>
-                                <input type="time" name="jam_mulai" required class="w-full bg-white border border-gray-100 py-4 px-5 rounded-2xl text-xs font-bold outline-none">
+                                <label class="text-[9px] font-black text-slate-400 uppercase ml-1 mb-1 block">Jam Mulai</label>
+                                <input type="time" name="jam_mulai" required class="w-full bg-white border border-slate-200/60 py-2.5 px-4 rounded-xl text-xs font-bold outline-none focus:border-blue-500">
                             </div>
                             <div>
-                                <label class="text-[9px] font-black text-gray-400 uppercase ml-2 mb-1 block">Selesai</label>
-                                <input type="time" name="jam_selesai" required class="w-full bg-white border border-gray-100 py-4 px-5 rounded-2xl text-xs font-bold outline-none">
+                                <label class="text-[9px] font-black text-slate-400 uppercase ml-1 mb-1 block">Jam Selesai</label>
+                                <input type="time" name="jam_selesai" required class="w-full bg-white border border-slate-200/60 py-2.5 px-4 rounded-xl text-xs font-bold outline-none focus:border-blue-500">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="text-[9px] font-black text-slate-400 uppercase ml-1 mb-1 block">Upload KTM (PDF/Gambar)</label>
+                            <div class="relative flex items-center justify-center w-full">
+                                <label :class="ktmFile ? 'border-emerald-400 bg-emerald-50/20' : 'border-slate-200 bg-white'" class="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed rounded-xl cursor-pointer hover:bg-slate-50/50 transition-all duration-200">
+                                    <div class="flex flex-col items-center justify-center pt-3 pb-3 text-center px-4">
+                                        <template x-if="!ktmFile">
+                                            <div class="contents">
+                                                <i class="fas fa-cloud-upload-alt text-xl text-slate-400 mb-1"></i>
+                                                <p class="text-[10px] text-slate-500 font-bold">Klik untuk unggah file KTM</p>
+                                                <p class="text-[8px] text-slate-400 mt-0.5">Maksimal ukuran 2MB</p>
+                                            </div>
+                                        </template>
+                                        <template x-if="ktmFile">
+                                            <div class="contents">
+                                                <i class="fas fa-check-circle text-2xl text-emerald-500 mb-1 animate-bounce"></i>
+                                                <p class="text-[10px] text-emerald-600 font-black uppercase tracking-wider">File KTM Terpilih!</p>
+                                                <p class="text-[9px] text-slate-600 font-medium truncate max-w-[280px] mt-0.5" x-text="ktmFile"></p>
+                                            </div>
+                                        </template>
+                                    </div>
+                                    <input type="file" name="ktm" required class="hidden" accept="image/*,application/pdf" @change="ktmFile = $event.target.files[0] ? $event.target.files[0].name : ''">
+                                </label>
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="w-full bg-blue-600 text-white font-black py-5 rounded-[25px] uppercase tracking-widest text-[10px] shadow-xl hover:bg-blue-700 transition-all">Ajukan Sekarang</button>
+                    
+                    <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3.5 rounded-xl uppercase tracking-wider text-xs shadow-md shadow-blue-600/10 hover:bg-blue-700 transition-all active:scale-95">
+                        Ajukan Sekarang
+                    </button>
                 </form>
             </div>
         </div>
@@ -191,11 +213,18 @@
     <div x-show="openSchedule" x-cloak class="fixed inset-0 z-[60] flex items-center justify-center p-4">
         <div x-show="openSchedule" x-transition.opacity class="fixed inset-0 bg-[#0B0A4E]/80 backdrop-blur-md" @click="openSchedule = false"></div>
         <div x-show="openSchedule" x-transition.scale.95 class="bg-white w-full max-w-5xl rounded-[40px] overflow-hidden shadow-2xl relative z-10 border border-white">
-            <div class="p-8 border-b border-gray-100 flex justify-between items-center">
+            <div class="p-8 border-b border-gray-100 flex flex-col sm:flex-row justify-between sm:items-center gap-4">
                 <div>
                     <h3 class="text-xl font-black text-[#0B0A4E] uppercase tracking-tighter">Monitoring Jadwal Ruangan</h3>
-                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Ketersediaan Hari Ini (06:00 - 18:00)</p>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Jadwal Tanggal: <span class="text-blue-600 italic">{{ request('filter_date', date('Y-m-d')) }}</span></p>
                 </div>
+                
+                <form method="GET" action="{{ route('mahasiswa.dashboard') }}" class="flex items-center gap-2 bg-slate-50 p-2 rounded-2xl border border-slate-200">
+                    <input type="hidden" name="open_schedule" value="1">
+                    <label class="text-[10px] font-black text-[#0B0A4E] uppercase tracking-wider pl-2">Pilih Tanggal:</label>
+                    <input type="date" name="filter_date" value="{{ request('filter_date', date('Y-m-d')) }}" onchange="this.form.submit()" class="bg-white border border-slate-200 py-1.5 px-3 rounded-xl text-xs font-bold text-slate-700 outline-none focus:border-blue-500">
+                </form>
+                
                 <button @click="openSchedule = false" class="text-gray-400 hover:text-red-500 transition-colors"><i class="fas fa-times-circle text-2xl"></i></button>
             </div>
             <div class="p-8 overflow-x-auto">
@@ -249,8 +278,9 @@
             btn.innerHTML = `<i class="fas fa-circle-notch fa-spin mr-2"></i> Memproses...`;
 
             const roomData = Alpine.$data(document.querySelector('[x-data]')).selectedRoom;
+            
             let formData = new FormData(this);
-            formData.append('room_id', roomData._id); 
+            formData.append('room_id', roomData._id || roomData.id); 
             formData.append('room_name', roomData.nama_ruangan);
 
             fetch("{{ route('peminjaman.ajukan') }}", {
@@ -265,15 +295,15 @@
                         icon: 'success', title: 'PENGAJUAN BERHASIL',
                         text: 'Permohonan peminjaman ruangan telah diteruskan ke sistem.',
                         confirmButtonColor: '#0B0A4E', confirmButtonText: 'LIHAT RIWAYAT',
-                        customClass: { popup: 'rounded-[40px]', confirmButton: 'rounded-2xl font-black text-[10px] px-8 py-4' }
+                        customClass: { popup: 'rounded-[30px]', confirmButton: 'rounded-xl font-bold text-xs px-6 py-3' }
                     }).then(() => window.location.href = "{{ route('mahasiswa.peminjaman') }}");
                 } else {
-                    Swal.fire({ icon: 'error', title: 'PENGAJUAN GAGAL', text: data.message, confirmButtonColor: '#EF4444', customClass: { popup: 'rounded-[40px]' } });
+                    Swal.fire({ icon: 'error', title: 'PENGAJUAN GAGAL', text: data.message, confirmButtonColor: '#EF4444', customClass: { popup: 'rounded-[30px]' } });
                     btn.disabled = false; btn.innerText = "Ajukan Sekarang";
                 }
             })
             .catch(() => {
-                Swal.fire({ icon: 'warning', title: 'GANGGUAN SISTEM', text: 'Koneksi terputus.', confirmButtonColor: '#0B0A4E', customClass: { popup: 'rounded-[40px]' } });
+                Swal.fire({ icon: 'warning', title: 'GANGGUAN SISTEM', text: 'Koneksi terputus.', confirmButtonColor: '#0B0A4E', customClass: { popup: 'rounded-[30px]' } });
                 btn.disabled = false; btn.innerText = "Ajukan Sekarang";
             });
         });

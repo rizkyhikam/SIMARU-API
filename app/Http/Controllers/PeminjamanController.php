@@ -8,23 +8,22 @@ use App\Models\Room;
 
 class PeminjamanController extends Controller
 {
+    // Balikin ke isi awal lu yang ini aja bray, biar aman 100%
     public function updateStatus(Request $request, $id)
     {
-        // 1. Cari data peminjamannya
         $pinjam = Peminjaman::find($id);
         
         if (!$pinjam) {
             return response()->json(['success' => false, 'message' => 'Data tidak ditemukan']);
         }
 
-        $pinjam->status = $request->status; // 'Disetujui' atau 'Ditolak'
+        $pinjam->status = $request->status;
         $pinjam->save();
 
-        // 2. Kalo disetujui, otomatis ganti status ruangannya bray
         if ($request->status == 'Disetujui') {
             $ruangan = Room::where('nama_ruangan', $pinjam->room_name)->first();
             if ($ruangan) {
-                $ruangan->status = 'Dipakai'; // Ruangan jadi ga tersedia otomatis
+                $ruangan->status = 'Dipakai';
                 $ruangan->save();
             }
         }

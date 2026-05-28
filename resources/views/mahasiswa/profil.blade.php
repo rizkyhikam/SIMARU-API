@@ -22,14 +22,14 @@
     <div class="flex h-screen w-full overflow-hidden">
         
         <aside class="w-64 bg-[#0B0A4E] h-full flex flex-col p-6 shadow-2xl z-30 flex-shrink-0">
-            <div class="mb-10">
+            <div class="mb-10 flex flex-col items-start">
                 <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 bg-cyan-400 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-university text-[#0B0A4E] text-xs"></i>
+                    <div class="w-10 h-10 bg-white rounded-xl overflow-hidden shadow-md flex items-center justify-center p-0.5 flex-shrink-0">
+                        <img src="{{ asset('storage/rooms/logo simaru.jpeg') }}" alt="Logo SIMARU" class="w-full h-full object-cover rounded-lg">
                     </div>
                     <h1 class="text-xl font-black text-white tracking-tighter uppercase">SIMARU</h1>
                 </div>
-                <p class="text-cyan-400 text-[8px] font-black uppercase tracking-[0.3em] mt-2">Student Portal</p>
+                <p class="text-cyan-400 text-[8px] font-black uppercase tracking-[0.3em] mt-2 pl-1">Student Portal</p>
             </div>
 
             <nav class="flex-grow space-y-2">

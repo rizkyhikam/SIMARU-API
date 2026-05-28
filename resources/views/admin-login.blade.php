@@ -20,11 +20,13 @@
         <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-blue-400/20 rounded-full blur-[120px]"></div>
         
         <div class="relative z-10 text-center">
-            <div class="w-28 h-28 bg-white/10 backdrop-blur-xl rounded-[35px] flex items-center justify-center mb-8 mx-auto border border-white/20 shadow-2xl">
-                <i class="fas fa-university text-4xl text-white"></i>
+            <div class="w-28 h-28 bg-white rounded-[35px] flex items-center justify-center mb-8 mx-auto border border-white/20 shadow-2xl p-1.5">
+                <div class="w-full h-full rounded-[26px] overflow-hidden shadow-inner flex items-center justify-center">
+                    <img src="{{ asset('storage/rooms/logo simaru.jpeg') }}" alt="Logo SIMARU" class="w-full h-full object-cover">
+                </div>
             </div>
             <h1 class="text-6xl font-black text-white tracking-tighter mb-4">SIMARU</h1>
-            <p class="text-blue-200 text-lg font-medium opacity-80 leading-relaxed uppercase tracking-widest text-xs">
+            <p class="text-blue-200 text-xs font-medium opacity-80 leading-relaxed uppercase tracking-widest">
                 Sekolah Vokasi IPB
             </p>
         </div>

@@ -24,10 +24,10 @@
     <div class="fixed top-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-400/10 rounded-full blur-[120px] -z-10"></div>
     <div class="fixed bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[120px] -z-10"></div>
 
-    <div class="text-center">
-        <div class="w-20 h-20 bg-white rounded-[25px] shadow-2xl flex items-center justify-center mb-6 mx-auto border border-white">
-            <div class="w-14 h-14 bg-[#0B0A4E] rounded-2xl flex items-center justify-center shadow-lg">
-                <i class="fas fa-university text-xl text-white"></i>
+    <div class="text-center mt-6">
+        <div class="w-20 h-20 bg-white rounded-[24px] shadow-2xl flex items-center justify-center mb-6 mx-auto border border-white p-1">
+            <div class="w-full h-full rounded-[18px] overflow-hidden shadow-inner flex items-center justify-center">
+                <img src="{{ asset('storage/rooms/logo simaru.jpeg') }}" alt="Logo SIMARU" class="w-full h-full object-cover">
             </div>
         </div>
         <h1 class="text-4xl font-[900] text-[#0B0A4E] tracking-tighter mb-1 uppercase">SIMARU</h1>
