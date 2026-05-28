@@ -156,8 +156,8 @@
                 </button>
             </div>
 
-            <div class="p-6 overflow-y-auto space-y-4 text-left flex-grow">
-                <form id="formAjukanBooking" class="space-y-4" enctype="multipart/form-data" x-data="{ ktmFile: '' }">
+            <div class="p-6 overflow-y-auto space-y-4 text-left flex-grow" x-data="{ ktmFile: '' }">
+                <form id="formAjukanBooking" class="space-y-4" enctype="multipart/form-data">
                     @csrf
                     <div class="bg-slate-50 p-5 rounded-2xl border border-slate-100 space-y-3">
                         <div>
@@ -271,41 +271,50 @@
     </div>
 
     <script>
-        document.getElementById('formAjukanBooking').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const btn = this.querySelector('button[type="submit"]');
-            btn.disabled = true; 
-            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin mr-2"></i> Memproses...`;
+        document.addEventListener('submit', function(e) {
+            // Cek jika form yang sedang di-submit adalah form booking kita bray
+            if (e.target && e.target.id === 'formAjukanBooking') {
+                e.preventDefault();
+                
+                const currentForm = e.target;
+                const btn = currentForm.querySelector('button[type="submit"]');
+                btn.disabled = true; 
+                btn.innerHTML = `<i class="fas fa-circle-notch fa-spin mr-2"></i> Memproses...`;
 
-            const roomData = Alpine.$data(document.querySelector('[x-data]')).selectedRoom;
-            
-            let formData = new FormData(this);
-            formData.append('room_id', roomData._id || roomData.id); 
-            formData.append('room_name', roomData.nama_ruangan);
+                const roomData = Alpine.$data(document.querySelector('[x-data]')).selectedRoom;
+                
+                // KOENTJI UTAMA: Menggunakan e.target langsung biar file biner beneran ke-grab!
+                let formData = new FormData(currentForm);
+                formData.append('room_id', roomData._id || roomData.id); 
+                formData.append('room_name', roomData.nama_ruangan);
 
-            fetch("{{ route('peminjaman.ajukan') }}", {
-                method: "POST",
-                body: formData,
-                headers: { 'X-CSRF-TOKEN': "{{ csrf_token() }}", 'Accept': 'application/json' }
-            })
-            .then(res => res.json())
-            .then(data => {
-                if(data.success) {
-                    Swal.fire({
-                        icon: 'success', title: 'PENGAJUAN BERHASIL',
-                        text: 'Permohonan peminjaman ruangan telah diteruskan ke sistem.',
-                        confirmButtonColor: '#0B0A4E', confirmButtonText: 'LIHAT RIWAYAT',
-                        customClass: { popup: 'rounded-[30px]', confirmButton: 'rounded-xl font-bold text-xs px-6 py-3' }
-                    }).then(() => window.location.href = "{{ route('mahasiswa.peminjaman') }}");
-                } else {
-                    Swal.fire({ icon: 'error', title: 'PENGAJUAN GAGAL', text: data.message, confirmButtonColor: '#EF4444', customClass: { popup: 'rounded-[30px]' } });
+                fetch("{{ route('peminjaman.ajukan') }}", {
+                    method: "POST",
+                    body: formData,
+                    headers: { 
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}", 
+                        'Accept': 'application/json' 
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if(data.success) {
+                        Swal.fire({
+                            icon: 'success', title: 'PENGAJUAN BERHASIL',
+                            text: 'Permohonan peminjaman ruangan telah diteruskan ke sistem.',
+                            confirmButtonColor: '#0B0A4E', confirmButtonText: 'LIHAT RIWAYAT',
+                            customClass: { popup: 'rounded-[30px]', confirmButton: 'rounded-xl font-bold text-xs px-6 py-3' }
+                        }).then(() => window.location.href = "{{ route('mahasiswa.peminjaman') }}");
+                    } else {
+                        Swal.fire({ icon: 'error', title: 'PENGAJUAN GAGAL', text: data.message, confirmButtonColor: '#EF4444', customClass: { popup: 'rounded-[30px]' } });
+                        btn.disabled = false; btn.innerText = "Ajukan Sekarang";
+                    }
+                })
+                .catch(() => {
+                    Swal.fire({ icon: 'warning', title: 'GANGGUAN SISTEM', text: 'Koneksi terputus.', confirmButtonColor: '#0B0A4E', customClass: { popup: 'rounded-[30px]' } });
                     btn.disabled = false; btn.innerText = "Ajukan Sekarang";
-                }
-            })
-            .catch(() => {
-                Swal.fire({ icon: 'warning', title: 'GANGGUAN SISTEM', text: 'Koneksi terputus.', confirmButtonColor: '#0B0A4E', customClass: { popup: 'rounded-[30px]' } });
-                btn.disabled = false; btn.innerText = "Ajukan Sekarang";
-            });
+                });
+            }
         });
     </script>
 </body>

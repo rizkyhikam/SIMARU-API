@@ -3,7 +3,10 @@
     currentTab: 'Pending',
     showModalSetuju: false,
     showModalTolak: false,
-    selectedId: ''
+    selectedId: '',
+    // DATA BARU: Buat ngatur pop-up KTM mahasiswa
+    showModalKtm: false,
+    imgKtmUrl: ''
 }">
 <head>
     <meta charset="UTF-8">
@@ -97,9 +100,19 @@
                                         <h4 class="font-extrabold text-[#0B0A4E] text-base uppercase tracking-tight">
                                             {{ $item->room_name ?? 'Tanpa Nama Ruang' }}
                                         </h4>
-                                        <p class="text-[11px] text-blue-500 mt-0.5 font-bold uppercase tracking-widest">
-                                            {{ $item->user_name ?? 'Mahasiswa Anonim' }}
-                                        </p>
+                                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 mt-1">
+                                            <p class="text-[11px] text-blue-500 font-bold uppercase tracking-widest">
+                                                {{ $item->user_name ?? 'Mahasiswa Anonim' }}
+                                            </p>
+                                            
+                                            @if(!empty($item->file_ktm))
+                                                <button @click="imgKtmUrl = '{{ asset('storage/' . $item->file_ktm) }}'; showModalKtm = true" class="inline-flex items-center gap-1.5 bg-cyan-50 hover:bg-cyan-100 text-cyan-600 font-black px-2.5 py-0.5 rounded-lg text-[9px] uppercase tracking-wider transition-all border border-cyan-200 w-max cursor-pointer">
+                                                    <i class="fas fa-id-card"></i> Lihat KTM
+                                                </button>
+                                            @else
+                                                <span class="text-[8px] text-slate-400 font-bold uppercase tracking-wider italic">Gak Ada Berkas</span>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                             </td>
@@ -151,6 +164,31 @@
                 <button @click="updateStatus(showModalSetuju ? 'Disetujui' : 'Ditolak')" 
                         :class="showModalSetuju ? 'bg-green-500' : 'bg-red-500'" 
                         class="flex-1 text-white py-4 rounded-2xl font-black text-[10px] uppercase shadow-xl">Konfirmasi</button>
+            </div>
+        </div>
+    </div>
+
+    <div x-show="showModalKtm" x-cloak class="fixed inset-0 z-[110] flex items-center justify-center bg-navy-dark/80 backdrop-blur-md p-4" x-transition.opacity>
+        <div x-show="showModalKtm" x-transition.scale.95 class="bg-white rounded-[35px] overflow-hidden max-w-xl w-full shadow-2xl relative border border-slate-100 flex flex-col" @click.outside="showModalKtm = false">
+            
+            <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                <div class="flex items-center gap-2 text-navy-dark">
+                    <i class="fas fa-id-card text-sm"></i>
+                    <h3 class="text-xs font-black uppercase tracking-wider">Berkas KTM Mahasiswa</h3>
+                </div>
+                <button @click="showModalKtm = false" class="text-slate-400 hover:text-red-500 transition-colors">
+                    <i class="fas fa-times-circle text-xl"></i>
+                </button>
+            </div>
+
+            <div class="p-6 bg-slate-100/50 flex items-center justify-center max-h-[70vh] overflow-y-auto">
+                <img :src="imgKtmUrl" alt="KTM Mahasiswa" class="w-full h-auto object-contain rounded-2xl shadow-sm border border-slate-200">
+            </div>
+
+            <div class="px-6 py-4 border-t border-slate-100 flex justify-end bg-slate-50/50">
+                <button @click="showModalKtm = false" class="bg-navy-dark hover:bg-opacity-90 text-white font-bold px-6 py-2.5 rounded-xl text-[10px] uppercase tracking-wider shadow-md transition-all active:scale-95">
+                    Tutup
+                </button>
             </div>
         </div>
     </div>

@@ -17,6 +17,7 @@ class Peminjaman extends Model
         'tanggal',
         'jam_mulai',    // Jam mulai pinjam
         'jam_selesai',  // Jam selesai pinjam
-        'status'
+        'status',
+        'file_ktm'
     ];
 }
