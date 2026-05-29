@@ -96,9 +96,18 @@ class MahasiswaController extends Controller
     public function apiGetRooms()
     {
         $rooms = Room::all()->map(function($room) {
-            // Biar gambar muncul di Flutter/React Native, URL-nya harus lengkap (Full URL)
-            $room->image_url = $room->image ? url('storage/' . $room->image) : 'https://via.placeholder.com/400x280?text=No+Image';
-            return $room;
+            return [
+                'id'           => (string) $room->_id,
+                '_id'          => (string) $room->_id,
+                'nama_ruangan' => $room->nama_ruangan,
+                'kapasitas'    => (int) $room->kapasitas,
+                'fasilitas'    => $room->fasilitas,
+                'status'       => $room->status,
+                'image'        => $room->image,
+                'image_url'    => $room->image ? url('storage/' . $room->image) : 'https://via.placeholder.com/400x280?text=No+Image',
+                'created_at'   => $room->created_at ? $room->created_at->toDateTimeString() : null,
+                'updated_at'   => $room->updated_at ? $room->updated_at->toDateTimeString() : null,
+            ];
         });
 
         return response()->json([
@@ -109,12 +118,27 @@ class MahasiswaController extends Controller
 
     public function apiGetSchedules()
     {
-        // Kirim data peminjaman yang aktif ke temen mobile lu
-        $schedules = Peminjaman::whereIn('status', ['Pending', 'Disetujui'])->get();
+        $schedules = Peminjaman::orderBy('created_at', 'desc')->get()->map(function($p) {
+            return [
+                'id'          => (string) $p->_id,
+                '_id'         => (string) $p->_id,
+                'user_id'     => $p->user_id,
+                'user_name'   => $p->user_name,
+                'room_id'     => $p->room_id,
+                'room_name'   => $p->room_name,
+                'tanggal'     => $p->tanggal,
+                'jam_mulai'   => $p->jam_mulai,
+                'jam_selesai' => $p->jam_selesai,
+                'status'      => $p->status,
+                'file_ktm'    => $p->file_ktm,
+                'created_at'  => $p->created_at ? $p->created_at->toDateTimeString() : null,
+                'updated_at'  => $p->updated_at ? $p->updated_at->toDateTimeString() : null,
+            ];
+        });
         
         return response()->json([
             'success' => true,
-            'data' => $schedules
+            'data'    => $schedules
         ]);
     }
 }

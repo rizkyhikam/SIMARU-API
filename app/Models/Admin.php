@@ -12,6 +12,7 @@ class Admin extends Authenticatable
     protected $connection = 'mongodb';
     protected $collection = 'admins'; 
 
-    protected $fillable = ['nama', 'email', 'password'];
+    protected $fillable = ['nama', 'email', 'password', 'api_token'];
+
     protected $hidden = ['password'];
 }
