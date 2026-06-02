@@ -37,6 +37,7 @@ Route::post('/register', [ApiController::class, 'registerMahasiswa']);
 // --- Peminjaman Mahasiswa ---
 Route::post('/peminjaman/ajukan', [ApiController::class, 'ajukanPeminjaman']);
 Route::get('/peminjaman/riwayat', [ApiController::class, 'riwayatPeminjaman']);
+Route::post('/user/update-photo', [ApiController::class, 'updatePhoto']);
 
 // --- Admin: Ruangan ---
 Route::post('/ruangan/simpan', [ApiController::class, 'simpanRuangan']);

@@ -59,6 +59,7 @@ class ApiController extends Controller
                 'email' => $user->email,
                 'nim'   => $user->nim ?? '-',
                 'role'  => $user->role ?? 'mahasiswa',
+                'photo' => $user->photo ? url('storage/' . $user->photo) : null,
             ]
         ]);
     }
@@ -127,6 +128,38 @@ class ApiController extends Controller
             'success' => true,
             'message' => 'Akun berhasil dibuat. Silakan login.'
         ]);
+    }
+
+    /**
+     * POST /api/user/update-photo  (Bearer token mahasiswa)
+     * Multipart: photo (file)
+     * Response: { success, message, photo_url }
+     */
+    public function updatePhoto(Request $request)
+    {
+        $user = $this->getUserFromToken($request);
+        if (!$user) return $this->unauthorized();
+
+        $request->validate([
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        try {
+            $path = $request->file('photo')->store('profile_photos', 'public');
+            $user->photo = $path;
+            $user->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Foto profil berhasil diperbarui!',
+                'photo_url' => url('storage/' . $path)
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 
     // =========================================================================
